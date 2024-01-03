@@ -1,10 +1,14 @@
 package com.example.SocialMedia.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -26,4 +30,11 @@ public class User {
     private String email;
     @Column(name = "Password")
     private String password;
+
+    private List<Integer> followers;
+    private List<Integer> following;
+
+    @ManyToMany
+    @JsonIgnore
+    private List<Post> savedPosts=new ArrayList<>();
 }
