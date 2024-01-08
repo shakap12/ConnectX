@@ -2,20 +2,17 @@ package com.example.SocialMedia.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
 
     @Id
@@ -30,11 +27,22 @@ public class User {
     private String email;
     @Column(name = "Password")
     private String password;
-
-    private List<Integer> followers;
-    private List<Integer> following;
-
+    private List<Long> followers = new ArrayList<>();
+    private List<Long> following = new ArrayList<>();
+    public List<Long> getFollowers(){
+        return followers;
+    }
+    public void setFollowers(){
+        followers=new ArrayList<>();
+    }
+    public List<Long> getFollowing(){
+        return following;
+    }
+    public void setFollowing(){
+        following=new ArrayList<>();
+    }
     @ManyToMany
     @JsonIgnore
-    private List<Post> savedPosts=new ArrayList<>();
+    private List<Post> savedPosts = new ArrayList<>();
+
 }

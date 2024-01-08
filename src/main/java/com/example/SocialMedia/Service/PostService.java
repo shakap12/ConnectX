@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface PostService {
 
-    Post createPost(Post post, Long id) throws Exception;
+    Post createPost(Post post, String jwt) throws Exception;
 
-    String deletePost(Long postId, Long userId) throws Exception;
+    String deletePost(Long postId,String jwt) throws Exception;
 
 
     List<Post> findPostByUserId(Long userId);
@@ -18,8 +18,8 @@ public interface PostService {
 
     List<Post> findAllPosts();
 
-    Post savedPost(Long postId,Long userId) throws Exception;
+    Post savedPost(Long postId,String jwt) throws Exception;
 
-    Post likedPost(Long PostId, Long userId) throws Exception;
+    Post likedPost(Long PostId, String jwt) throws Exception;
 
 }

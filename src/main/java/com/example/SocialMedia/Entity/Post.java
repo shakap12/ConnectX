@@ -35,4 +35,7 @@ public class Post {
 
     @ManyToOne
     private User user;
+
+    @OneToMany
+    private List<Comment> comments=new ArrayList<>();
 }

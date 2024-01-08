@@ -21,17 +21,19 @@ public class PostServiceImpl implements PostService {
     @Autowired
     private UserRepository userRepository;
     @Override
-    public Post createPost(Post post, Long id) throws Exception {
-        User user= userService.getUserById(id);
+    public Post createPost(Post post, String jwt) throws Exception {
+        User reqUser=userService.getUserFromToken(jwt);
+        User user= userService.getUserById(reqUser.getUserId());
         post.setPostedDate(LocalDate.now());
         post.setUser(user);
         return postRepository.save(post);
     }
 
     @Override
-    public String deletePost(Long postId, Long userId) throws Exception {
+    public String deletePost(Long postId,String jwt) throws Exception {
+            User reqUser=userService.getUserFromToken(jwt);
             Post post=findPostById(postId);
-            User user=userService.getUserById(userId);
+            User user=userService.getUserById(reqUser.getUserId());
 
             if(post.getUser().getUserId()!=user.getUserId()){
                 throw new Exception("you cannot delete another users post");
@@ -58,9 +60,10 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post savedPost(Long postId, Long userId) throws Exception {
+    public Post savedPost(Long postId, String jwt) throws Exception {
+        User reqUser=userService.getUserFromToken(jwt);
         Post post=findPostById(postId);
-        User user=userService.getUserById(userId);
+        User user=userService.getUserById(reqUser.getUserId());
 
         if(user.getSavedPosts().contains(post)){
             user.getSavedPosts().remove(post);
@@ -71,9 +74,10 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post likedPost(Long postId, Long userId) throws Exception {
+    public Post likedPost(Long postId, String jwt) throws Exception {
+        User reqUser=userService.getUserFromToken(jwt);
         Post post=findPostById(postId);
-        User user=userService.getUserById(userId);
+        User user=userService.getUserById(reqUser.getUserId());
         if(post.getLikedPost().contains(user)){
             post.getLikedPost().remove(user);
         }

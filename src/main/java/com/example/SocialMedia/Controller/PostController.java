@@ -19,15 +19,15 @@ public class PostController {
     @Autowired
     private PostService postService;
 
-    @PostMapping("/user/{userId}")
-    private ResponseEntity<Post> createPost(@RequestBody Post post, @PathVariable("userId")Long id) throws Exception {
-        Post newPost=postService.createPost(post,id);
+    @PostMapping("/user")
+    private ResponseEntity<Post> createPost(@RequestBody Post post, @RequestHeader("Authorization")String jwt) throws Exception {
+        Post newPost=postService.createPost(post,jwt);
         return new ResponseEntity<>(newPost, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/delete/{userId}/{postId}")
-    private ResponseEntity<APIResponse> deletePost(@PathVariable("postId") Long postid, @PathVariable("userId")Long userID) throws Exception {
-        String msg=postService.deletePost(postid,userID);
+    @DeleteMapping("/delete/{postId}")
+    private ResponseEntity<APIResponse> deletePost(@PathVariable("postId") Long postid,@RequestHeader("Authorization")String jwt) throws Exception {
+        String msg=postService.deletePost(postid,jwt);
         APIResponse resp=APIResponse.builder()
                 .message(msg)
                 .status(true)
@@ -54,15 +54,15 @@ public class PostController {
         return new ResponseEntity<>(list,HttpStatus.ACCEPTED);
     }
 
-    @PutMapping("/saved/{postId}/{userId}")
-    private ResponseEntity<Post> savedPostHandler(@PathVariable("userId") Long userId,@PathVariable("postId") Long postId) throws Exception {
-        Post post=postService.savedPost(postId,userId);
+    @PutMapping("/saved/{postId}")
+    private ResponseEntity<Post> savedPostHandler(@PathVariable("postId") Long postId,@RequestHeader("Authorization")String jwt) throws Exception {
+        Post post=postService.savedPost(postId,jwt);
         return new ResponseEntity<>(post,HttpStatus.OK);
     }
 
-    @PutMapping("/liked/{postId}/{userId}")
-    private ResponseEntity<Post> likedPostHandler(@PathVariable("userId") Long userId,@PathVariable("postId") Long postId) throws Exception {
-        Post post=postService.likedPost(postId,userId);
+    @PutMapping("/liked/{postId}")
+    private ResponseEntity<Post> likedPostHandler(@PathVariable("postId")Long postId,@RequestHeader("Authorization")String jwt) throws Exception {
+        Post post=postService.likedPost(postId,jwt);
         return new ResponseEntity<>(post,HttpStatus.OK);
     }
 

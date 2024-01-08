@@ -19,11 +19,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/")
-    public ResponseEntity<User> createUser(@RequestBody User user){
-        userService.createUser(user);
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
-    }
+
 
     @GetMapping("/get")
     public ResponseEntity<List<User>> getAllUsers(){
@@ -37,9 +33,9 @@ public class UserController {
         return new ResponseEntity<>(user,HttpStatus.OK);
     }
 
-    @PutMapping("/update/{userId}")
-    public ResponseEntity<User> updateUser(@RequestBody User user, @PathVariable("userId") Long userId){
-        User updUser=userService.updateUser(user,userId);
+    @PutMapping("/update")
+    public ResponseEntity<User> updateUser(@RequestBody User user,@RequestHeader ("Authorization")String jwt){
+        User updUser=userService.updateUser(user,jwt);
         return new ResponseEntity<>(updUser,HttpStatus.ACCEPTED);
     }
 
@@ -47,5 +43,17 @@ public class UserController {
     public ResponseEntity<String> deleteUser(@PathVariable("userId") Long id){
         userService.deleteUser(id);
         return new ResponseEntity<>("User with id-"+id+" deleted!",HttpStatus.OK);
+    }
+
+
+    @GetMapping("/profile")
+    public User getUserFromToken(@RequestHeader ("Authorization")String jwt){
+        return userService.getUserFromToken(jwt);
+    }
+
+    @PutMapping("/follow/{userId1}/{userId2}")
+    public User followUserHandler(@PathVariable("userId1")Long userId1,@PathVariable("userId2")Long userId2){
+        User user=userService.followUserHandler(userId1,userId2);
+        return user;
     }
 }
